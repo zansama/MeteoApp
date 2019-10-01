@@ -1,6 +1,10 @@
-import React from 'react';
+import React, {useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {View, Text, Dimensions} from "react-native";
+import { connect } from 'react-redux';
+import {View, Text, Dimensions} from "react-native"
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions'
+
 
 const {width} = Dimensions.get('window');
 
@@ -17,14 +21,56 @@ const styleSheet = {
         fontSize: 25,
         fontWeight: 'bold',
     },
+    errStyle: {
+        color: 'red',
+        fontSize: 25,
+        fontWeight: 'bold',
+    }
 };
 
-const HomeScreen = props =>(
-    <View style={styleSheet.container}>
-    <Text style={styleSheet.textStyle}>ICI JE VEUX LA METEO</Text>
-    </View>
-);
+const HomeScreen = props => {
+   async function _getLocationAsync(){
+       let { status } = await Permissions.askAsync(Permissions.LOCATION);
+       if (status !== 'granted') {
+           setError('Permission to acces location was denied');
+       }
 
-HomeScreen.propTypes = {};
+       let location = await Location.getCurrentPositionAsync({});
+       dispatch({type: 'app/getMeteoInformations', payload: location})
+   }
 
-export default HomeScreen;
+   useEffect(() => {
+       _getLocationAsync();
+   }, []);
+
+    useEffect(() => {
+        console.log(informations);
+        if (informations.main) {
+            setNameCity(informations.name);
+            setTemp(informations.main.temp);
+        }
+    });
+
+    const { dispatch, app: {informations} } = props;
+    const [nameCity, setNameCity] = useState('');
+    const [temp, setTemp] = useState('');
+    const [error, setError] = useState('');
+
+    return (
+        <View style={styleSheet.container}>
+            <Text style={styleSheet.textStyle}>{`Ville: ${nameCity}`}</Text>
+            <Text style={styleSheet.textStyle}>{`Temperature: ${temp} °C`}</Text>
+            {error !== '' && <Text style={styleSheet.errStyle}>{error}</Text>}
+        </View>
+    )
+
+};
+
+HomeScreen.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    app: PropTypes.shape({
+        informations: PropTypes.object,
+    }).isRequired
+};
+
+export default connect(({app}) => ({app}))(HomeScreen);

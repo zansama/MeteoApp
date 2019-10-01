@@ -30,9 +30,10 @@ const  IntroFormScreen = props => {
     async function handleSubmit() {
         if(name !== '') {
             test.app.setName(name);
-            //await AsyncStorage.setItem('name', name);
+            await AsyncStorage.setItem('name', name);
             navigation.navigate('Welcome');
         }
+
     }
 
     const test = useDispatch();

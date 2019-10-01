@@ -12,7 +12,7 @@ import IntroFormScreen from  '../screens/IntroFormScreen'
 
 const AppStack = createStackNavigator({ Home: HomeScreen});
 const AuthStack = createStackNavigator({ SignIn: IntroFormScreen, Welcome: IntroScreen });
-const AppTabs = createBottomTabNavigator({ Home: HomeScreen});
+const AppTabs = createBottomTabNavigator({ Home: HomeScreen, Intro: 'lebouton2', Test: 'lebouton'});
 const AuthTabs = createBottomTabNavigator({ SignIn: IntroFormScreen, Welcome: IntroScreen });
 
 
