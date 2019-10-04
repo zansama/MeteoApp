@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {connect, useDispatch} from 'react-redux';
 import {View, Text, TextInput, Button, Dimensions, AsyncStorage} from "react-native";
+import Introform from '../components/Introform';
 
 const {width} = Dimensions.get('window');
 
@@ -42,19 +43,9 @@ const  IntroFormScreen = props => {
     const {dispatch, navigation} = props;
 
     return(
-        <View style={styleSheet.container}>
-            <Text style={styleSheet.label}>Prénom</Text>
-            <TextInput
-                style={styleSheet.input}
-                onChangeText={(text) => setName(text)}
-                value={name}
-            />
-            <Button
-                onPress={handleSubmit}
-                title="OK"
-                color="#841584"
-            />
-        </View>
+
+        <Introform handle={handleSubmit} name={name} style={styleSheet} method={setName}/>
+
     )
 };
 

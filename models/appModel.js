@@ -4,6 +4,7 @@ export const app = {
     state: {
         name:'',
         informations: {},
+        city: []
     },
     reducers: {
         setName(state, name) {
@@ -11,7 +12,10 @@ export const app = {
         },
         setInformations(state, informations) {
             return {...state, informations};
-        }
+        },
+        setCity(state, city) {
+            return {...state, city};
+        },
     },
     effects: (dispatch) => ({
         async getMeteoInformations(location) {
